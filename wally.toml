@@ -1,0 +1,30 @@
+[package]
+name = "demistudios/cleaner"
+description = "A typed cleanup manager for Roblox, like Trove, Maid and Janitor, that never throws or yields while cleaning"
+version = "0.1.0"
+license = "MIT"
+authors = ["DeMiStudios"]
+realm = "shared"
+registry = "https://github.com/UpliftGames/wally-index"
+# TODO: placeholder, point these at the real repository before publishing.
+homepage = "https://github.com/DeMiStudios/Cleaner"
+repository = "https://github.com/DeMiStudios/Cleaner"
+exclude = [
+	"tests",
+	"scripts",
+	".github",
+	".vscode",
+	"test.project.json",
+	"rokit.toml",
+	"stylua.toml",
+	".luaurc",
+	"*.rbxl",
+	"*.rbxlx",
+	"*.lock",
+	"sourcemap.json",
+]
+
+[dev-dependencies]
+Jest = "roblox/jest@3.20.1"
+JestGlobals = "roblox/jest-globals@3.20.1"
+Promise = "evaera/promise@4.0.0"

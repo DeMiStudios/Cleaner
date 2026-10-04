@@ -1,0 +1,17 @@
+# Rojo / tooling outputs
+sourcemap.json
+*.rbxl
+*.rbxlx
+*.rbxm
+*.rbxmx
+*.lock
+!rokit.lock
+
+# Packages
+Packages/
+DevPackages/
+ServerPackages/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db

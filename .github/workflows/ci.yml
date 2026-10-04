@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Format and type-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: CompeyDev/setup-rokit@v0.1.2
+
+      - name: Check formatting
+        run: stylua --check src tests
+
+      - name: Install packages
+        run: wally install
+
+      - name: Type-check
+        run: |
+          rojo sourcemap test.project.json -o sourcemap.json
+          curl -fsSL -o "$RUNNER_TEMP/globalTypes.d.luau" \
+            https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/main/scripts/globalTypes.d.luau
+          luau-lsp analyze --platform=roblox --sourcemap=sourcemap.json \
+            --definitions="$RUNNER_TEMP/globalTypes.d.luau" --flag:LuauSolverV2=true \
+            --ignore="DevPackages/**" src tests
+
+  test:
+    name: Test (Open Cloud)
+    runs-on: ubuntu-latest
+    # Every run publishes a version of the test place; don't race uploads.
+    concurrency: roblox-test-place
+    env:
+      ROBLOX_API_KEY: ${{ secrets.ROBLOX_API_KEY }}
+      ROBLOX_UNIVERSE_ID: ${{ vars.ROBLOX_UNIVERSE_ID }}
+      ROBLOX_PLACE_ID: ${{ vars.ROBLOX_PLACE_ID }}
+    steps:
+      # Secrets aren't available to pull requests from forks, so those skip the tests instead of failing.
+      - name: Skip without Open Cloud credentials
+        if: env.ROBLOX_API_KEY == ''
+        run: echo "::notice::ROBLOX_API_KEY is not set; skipping tests."
+
+      - uses: actions/checkout@v4
+        if: env.ROBLOX_API_KEY != ''
+
+      - uses: CompeyDev/setup-rokit@v0.1.2
+        if: env.ROBLOX_API_KEY != ''
+
+      - name: Build test place
+        if: env.ROBLOX_API_KEY != ''
+        run: |
+          wally install
+          rojo build test.project.json -o tests.rbxl
+
+      - name: Run tests
+        if: env.ROBLOX_API_KEY != ''
+        run: python3 scripts/run-cloud-tests.py tests.rbxl

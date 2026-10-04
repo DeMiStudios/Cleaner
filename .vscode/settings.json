@@ -1,0 +1,17 @@
+{
+	"[luau]": {
+		"editor.defaultFormatter": "JohnnyMorganz.stylua"
+	},
+	"editor.detectIndentation": false,
+	"editor.formatOnSave": true,
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4,
+	"editor.useTabStops": true,
+	"files.eol": "\n",
+	"files.insertFinalNewline": true,
+	"luau-lsp.platform.type": "roblox",
+	"luau-lsp.fflags.enableNewSolver": true,
+	"luau-lsp.sourcemap.enabled": true,
+	"luau-lsp.sourcemap.rojoProjectFile": "test.project.json",
+	"luau-lsp.sourcemap.autogenerate": true
+}

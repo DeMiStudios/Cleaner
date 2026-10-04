@@ -1,0 +1,22 @@
+{
+	"name": "cleaner-tests",
+	"tree": {
+		"$className": "DataModel",
+		"ServerScriptService": {
+			"$properties": {
+				"LoadStringEnabled": true
+			}
+		},
+		"ReplicatedStorage": {
+			"Cleaner": {
+				"$path": "src"
+			},
+			"DevPackages": {
+				"$path": "DevPackages"
+			},
+			"Tests": {
+				"$path": "tests"
+			}
+		}
+	}
+}
