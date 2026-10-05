@@ -28,7 +28,7 @@ TIMEOUT_SECONDS = 300
 
 # Runs inside the uploaded place. Its return values become the task's `output.results`.
 TASK_SCRIPT = """
-local runTests = require(game:GetService("ReplicatedStorage").Tests.Runner)
+const runTests = require(game:GetService("ReplicatedStorage").Tests.Runner)
 return runTests({ ci = true })
 """
 

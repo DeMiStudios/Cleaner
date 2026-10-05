@@ -12,7 +12,7 @@ const expect = JestGlobals.expect
 const Cleaner = require(ReplicatedStorage.Cleaner)
 
 -- Destroy locks an Instance's Parent, so a destroyed Instance can't be reparented.
-local function isDestroyed(instance: Instance): boolean
+const function isDestroyed(instance: Instance): boolean
 	const originalParent = instance.Parent
 	const probe = Instance.new("Folder")
 	const reparented = pcall(function()
@@ -26,7 +26,7 @@ local function isDestroyed(instance: Instance): boolean
 end
 
 -- Runs `callback` and returns the Cleaner warnings it emitted. Waits a frame since MessageOut may be deferred.
-local function captureWarnings(callback: () -> ()): { string }
+const function captureWarnings(callback: () -> ()): { string }
 	const warnings = {}
 	const connection = LogService.MessageOut:Connect(function(message, messageType)
 		if messageType == Enum.MessageType.MessageWarning and string.find(message, "[ Cleaner ]", 1, true) then
@@ -40,7 +40,7 @@ local function captureWarnings(callback: () -> ()): { string }
 end
 
 -- A table with a Destroy method that counts its calls.
-local function counter()
+const function counter()
 	const object = { calls = 0 }
 	function object.Destroy(self: typeof(object))
 		self.calls += 1

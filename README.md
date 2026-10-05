@@ -4,10 +4,10 @@ A cleanup manager for Roblox, filling the same role as Trove, Maid and Janitor. 
 threads, cleanup functions and objects, then tear them all down with one call.
 
 ```lua
-local Cleaner = require(ReplicatedStorage.Packages.Cleaner)
+const Cleaner = require(ReplicatedStorage.Packages.Cleaner)
 
-local cleaner = Cleaner.new()
-local part = cleaner:Add(Instance.new("Part")) -- returns its argument, type preserved
+const cleaner = Cleaner.new()
+const part = cleaner:Add(Instance.new("Part")) -- returns its argument, type preserved
 cleaner:Add(part.Touched:Connect(onTouched))
 cleaner:Add(TweenOut, frameA, 3) -- runs TweenOut(frameA, 3) on cleanup
 cleaner:Add(TweenOut, frameB, 2) -- the same function can be tracked again with other args

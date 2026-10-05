@@ -80,13 +80,13 @@ type CleanerData = {
 export type Cleaner = setmetatable<CleanerData, typeof(Cleaner)>
 
 -- `tbl[key]` as a function, so a lookup that may hit a throwing `__index` can be pcall'd.
-local function getField(tbl: { [unknown]: unknown }, key: unknown): unknown
+const function getField(tbl: { [unknown]: unknown }, key: unknown): unknown
 	return tbl[key]
 end
 
 -- Returns `tbl[name]` if it is a function, or nil. Never throws: some classes use an `__index` that throws on unknown
 -- keys, so each lookup is guarded on its own.
-local function getMethod(tbl: { [unknown]: unknown }, name: string): ((any) -> ...any)?
+const function getMethod(tbl: { [unknown]: unknown }, name: string): ((any) -> ...any)?
 	const success, method = pcall(getField, tbl, name)
 	if success and typeof(method) == "function" then
 		return method :: (any) -> ...any
@@ -95,7 +95,7 @@ local function getMethod(tbl: { [unknown]: unknown }, name: string): ((any) -> .
 end
 
 -- Whether `tbl` looks like a Promise. Never throws.
-local function isPromise(tbl: { [unknown]: unknown }): boolean
+const function isPromise(tbl: { [unknown]: unknown }): boolean
 	for _, name in PROMISE_METHOD_NAMES do
 		if getMethod(tbl, name) == nil then
 			return false
@@ -106,7 +106,7 @@ end
 
 -- Returns the method that tears `tbl` down, or nil. Never throws.
 -- A class that only defines `Disconnect` must not be rejected because the earlier `Destroy` lookup threw.
-local function getCleanupMethod(tbl: { [unknown]: unknown }): ((any) -> ...any)?
+const function getCleanupMethod(tbl: { [unknown]: unknown }): ((any) -> ...any)?
 	for _, name in CLEANUP_METHOD_NAMES do
 		const method = getMethod(tbl, name)
 		if method then
@@ -120,7 +120,7 @@ local function getCleanupMethod(tbl: { [unknown]: unknown }): ((any) -> ...any)?
 end
 
 -- Whether a value has a teardown path (see `cleanTrackable`).
-local function isCleanable(trackable: unknown): boolean
+const function isCleanable(trackable: unknown): boolean
 	const kind = typeof(trackable)
 	if kind == "table" then
 		return getCleanupMethod(trackable :: { [unknown]: unknown }) ~= nil
@@ -129,14 +129,14 @@ local function isCleanable(trackable: unknown): boolean
 end
 
 -- Calls the table's cleanup method. Runs on its own thread (see `cleanTrackable`).
-local function cleanupTable(tbl: { [unknown]: unknown })
+const function cleanupTable(tbl: { [unknown]: unknown })
 	const method = getCleanupMethod(tbl)
 	if method then
 		method(tbl)
 	end
 end
 
-local function cleanInstance(instance: Instance)
+const function cleanInstance(instance: Instance)
 	if instance:IsA("AnimationTrack") then
 		instance:Stop()
 	elseif instance:IsA("Tween") then
@@ -154,7 +154,7 @@ end
 
 -- Tears down a single entry. Must never throw or yield (Clean relies on this to reset `_isCleaning`); anything that
 -- could do either runs on its own thread or under pcall.
-local function cleanTrackable(trackable: unknown, args: PackedArgs | false)
+const function cleanTrackable(trackable: unknown, args: PackedArgs | false)
 	if typeof(trackable) == "function" then
 		if args then
 			task.spawn(trackable, table.unpack(args, 1, args.n))
@@ -179,7 +179,7 @@ end
 -- Removes the most recently added entry matching `trackable` from both parallel arrays.
 -- Returns whether an entry was found, and that entry's args.
 -- Searches from the end so that duplicates are removed in LIFO order, matching teardown order.
-local function detach(self: CleanerData, trackable: unknown): (boolean, PackedArgs | false)
+const function detach(self: CleanerData, trackable: unknown): (boolean, PackedArgs | false)
 	const tracked = self._tracked
 	for index = #tracked, 1, -1 do
 		if tracked[index] == trackable then
