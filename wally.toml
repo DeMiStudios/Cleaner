@@ -1,7 +1,7 @@
 [package]
 name = "demistudios/cleaner"
 description = "A typed cleanup manager for Roblox, like Trove, Maid and Janitor, that never throws or yields while cleaning"
-version = "0.1.0"
+version = "0.1.1"
 license = "MIT"
 authors = ["DeMiStudios"]
 realm = "shared"

@@ -42,7 +42,7 @@ Cleaner is written for current Luau and targets the **new type solver**:
    their `Stopped`/`Completed` events still fire.
 4. **Empty afterwards:** when `Clean` returns, everything that was tracked has been torn down (or started teardown,
    if it yields), and the Cleaner is empty. The one exception is a value added by teardown code during the `Clean`
-   (see [Adding during cleaning](#edge-cases)).
+   (see [Adding during cleaning](#edge-cases)), which is strongly discouraged.
 5. **Typed:** `Add` returns exactly the type it was given, and the extra arguments of a tracked function are
    type-checked against that function.
 
